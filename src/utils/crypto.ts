@@ -1,8 +1,19 @@
-import crypto from 'crypto';
+import CryptoJS from "crypto-js";
 
-export default function generateUid(x: number) {
-    const uidBytes = crypto.randomBytes(x);
-    return uidBytes.toString('hex');
-}
+const generateEncryptedData = (data: any) => {
+  return CryptoJS.AES.encrypt(
+    JSON.stringify(data),
+    process.env.ENC_KEY || ""
+  ).toString();
+};
 
+const decryptData = (data: any) => {
+  var decryptedData = CryptoJS.AES.decrypt(
+    data,
+    process.env.ENC_KEY || ""
+  ).toString(CryptoJS.enc.Utf8);
+  console.log(JSON.parse(JSON.parse(decryptedData)));
+  return JSON.parse(JSON.parse(decryptedData));
+};
 
+export { generateEncryptedData, decryptData };
